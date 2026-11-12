@@ -296,8 +296,8 @@ function renderStats(bal) {
   const open = debtsInfo().filter(d => d.remaining > 0);
   $('#sLabel').textContent = (K()?.name || 'Kassa') + ' — qoldiq';
   $('#sBalance').textContent = fmtMoney(bal);
-  $('#sTodayIn').textContent = '+' + fmtNum(inT);
-  $('#sTodayOut').textContent = '−' + fmtNum(outT);
+  $('#sTodayIn').textContent = (inT ? '+' : '') + fmtNum(inT);
+  $('#sTodayOut').textContent = (outT ? '−' : '') + fmtNum(outT);
   $('#sDebts').textContent = fmtNum(open.reduce((s, d) => s + d.remaining, 0)) + (open.length ? ` · ${open.length} ta` : '');
 }
 
