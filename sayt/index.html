@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Xisobchi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Birinchi ishga tushirish: boshlang'ich summa -->
+<div id="setup" class="setup hidden">
+  <div class="card setup-card">
+    <h1>Xisobchi</h1>
+    <p class="muted">Birinchi kassangizni yarating: nomi va hozir unda qancha pul borligi. Keyin istalgancha kassa qo'shishingiz mumkin (masalan, bozorlik kassasi).</p>
+    <label>Kassa nomi
+      <input id="setupName" value="Ishxona kassasi" placeholder="Masalan: Ishxona kassasi">
+    </label>
+    <label>Hozir kassadagi summa (so'm)
+      <input id="setupAmount" class="money big" inputmode="numeric" placeholder="0">
+    </label>
+    <label>Sana va vaqt
+      <input id="setupDate" type="datetime-local">
+    </label>
+    <button id="setupBtn" class="btn primary wide">Boshlash</button>
+    <div class="or"><span>yoki</span></div>
+    <button id="setupGoogle" class="btn ghost wide" type="button"><span class="g-logo"></span>Google Drive'dagi ma'lumotni ochish</button>
+    <p class="hint center">Avval boshqa qurilmada ishlatgan bo'lsangiz — shu Google akkaunt bilan kiring</p>
+  </div>
+</div>
+
+<div id="app" class="hidden">
+  <header>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">Xisobchi</div>
+        <button id="syncPill" class="sync warn" type="button">Faylga saqlanmayapti</button>
+      </div>
+      <div class="kassas" id="kassaBar"></div>
+      <div class="stats">
+        <div class="stat main"><span id="sLabel">Kassadagi qoldiq</span><b id="sBalance"></b></div>
+        <div class="stat"><span>Bugun kirim</span><b id="sTodayIn" class="pos"></b></div>
+        <div class="stat"><span>Bugun chiqim</span><b id="sTodayOut" class="neg"></b></div>
+        <div class="stat"><span>Qarzda turgan pul</span><b id="sDebts" class="warn"></b></div>
+      </div>
+      <nav class="tabs">
+        <button data-tab="add" class="active">Yangi yozuv</button>
+        <button data-tab="history">Tarix</button>
+        <button data-tab="debts">Qarzlar</button>
+        <button data-tab="settings">Sozlamalar</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- YANGI YOZUV -->
+    <section id="tab-add" class="tab active">
+      <div id="cloudBanner" class="banner hidden">
+        <div><b id="cbTitle"></b><span id="cbText"></span></div>
+        <button class="btn small primary" id="cbBtn" type="button"><span class="g-logo"></span>Google bilan ulash</button>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <div class="seg" id="typeSeg">
+            <button type="button" data-type="kirim">+ Kirim</button>
+            <button type="button" data-type="chiqim">− Chiqim</button>
+            <button type="button" data-type="qarz">Qarzga berish</button>
+          </div>
+          <form id="entryForm" autocomplete="off">
+            <div id="formFields"></div>
+            <button id="entrySubmit" class="btn primary wide" type="submit">Saqlash</button>
+          </form>
+        </div>
+        <div class="card">
+          <h2>Oxirgi yozuvlar</h2>
+          <div id="recent"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TARIX -->
+    <section id="tab-history" class="tab">
+      <div class="card">
+        <div class="filters">
+          <div class="quick">
+            <button data-range="today">Bugun</button>
+            <button data-range="week">7 kun</button>
+            <button data-range="month" class="active">Shu oy</button>
+            <button data-range="all">Hammasi</button>
+          </div>
+          <div class="frow">
+            <label>Dan<input type="date" id="fFrom"></label>
+            <label>Gacha<input type="date" id="fTo"></label>
+            <label>Turi
+              <select id="fType">
+                <option value="">Hammasi</option>
+                <option value="kirim">Kirim</option>
+                <option value="chiqim">Chiqim</option>
+                <option value="qarz">Qarzga berildi</option>
+                <option value="qaytdi">Qarz qaytdi</option>
+              </select>
+            </label>
+            <label class="grow">Qidirish<input type="search" id="fQ" placeholder="Ism, izoh, kategoriya..."></label>
+          </div>
+        </div>
+        <div id="hTotals" class="totals"></div>
+        <div class="right"><button class="btn small ghost" id="csvBtn">Excelga yuklab olish (CSV)</button></div>
+        <div id="historyList"></div>
+      </div>
+    </section>
+
+    <!-- QARZLAR -->
+    <section id="tab-debts" class="tab">
+      <div class="card">
+        <h2>Kim qancha qarzdor</h2>
+        <div id="debtSummary"></div>
+      </div>
+      <div class="card">
+        <h2>Qaytarilmagan qarzlar</h2>
+        <div id="debtOpen"></div>
+      </div>
+      <div class="card">
+        <details>
+          <summary><h2 class="inline">Yopilgan qarzlar</h2> <span id="closedCount" class="muted"></span></summary>
+          <div id="debtClosed"></div>
+        </details>
+      </div>
+    </section>
+
+    <!-- SOZLAMALAR -->
+    <section id="tab-settings" class="tab">
+      <div class="card">
+        <div class="card-head">
+          <h2>Kassalar</h2>
+          <button class="btn small primary" id="kAddSettings" type="button">+ Yangi kassa</button>
+        </div>
+        <p class="muted">Har bir kassaning qoldig'i, tarixi va qarzlari alohida yuritiladi. Boshlang'ich summani o'zgartirish uchun kassani tahrirlang.</p>
+        <div id="kassaList"></div>
+      </div>
+      <div class="card" id="cloudCard">
+        <h2>Google Drive</h2>
+        <p class="muted">Har bir yozuv Google Drive'dagi <b>Xisobchi</b> papkasiga avtomatik saqlanadi, <b>zaxira</b> papkasida har kunning nusxasi qoladi. Kompyuter buzilsa ham ma'lumot yo'qolmaydi, telefondan ham shu Google akkaunt bilan kirib ishlash mumkin.</p>
+        <div class="disk-status" id="cloudStatus"></div>
+        <div class="btns">
+          <button class="btn primary" id="gConnect">Google bilan ulash</button>
+          <a class="btn ghost hidden" id="gOpen" target="_blank" rel="noopener">Drive'da ochish</a>
+          <button class="btn ghost hidden" id="gDisconnect">Uzish</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Qo'lda zaxira</h2>
+        <p class="muted">Istalgan paytda alohida zaxira fayl yuklab olishingiz yoki fayldan tiklashingiz mumkin. <span id="lastBackup"></span></p>
+        <div class="btns">
+          <button class="btn primary" id="exportJson">Zaxira yuklab olish</button>
+          <label class="btn ghost file">Zaxiradan tiklash<input type="file" id="importJson" accept=".json,application/json"></label>
+          <button class="btn ghost" id="exportAllCsv">Hammasini Excelga (CSV)</button>
+        </div>
+      </div>
+      <div class="card danger">
+        <h2>Hammasini o'chirish</h2>
+        <p class="muted">Barcha yozuvlar va boshlang'ich qoldiq o'chadi. Avval zaxira oling.</p>
+        <button class="btn danger" id="wipe">Hammasini o'chirish</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Modal oyna -->
+<div id="modal" class="modal hidden">
+  <div class="modal-box">
+    <h3 id="mTitle"></h3>
+    <form id="mForm" autocomplete="off">
+      <div id="mBody"></div>
+      <div class="m-act">
+        <button type="button" class="btn ghost" id="mCancel">Bekor qilish</button>
+        <button type="submit" class="btn primary">Saqlash</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<datalist id="dlPersons"></datalist>
+<datalist id="dlCats"></datalist>
+<div id="toast"></div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
