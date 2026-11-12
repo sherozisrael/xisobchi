@@ -1,87 +1,39 @@
-# Xisobchi — internetga joylash va Google Drive'ni ulash
+# Xisobchi — sozlamalar va eslatmalar
 
-Bir martalik ish, taxminan 20 daqiqa. Hammasi bepul.
-Tartib muhim: **avval sayt manzilini olamiz, keyin Google'ni sozlaymiz.**
+**Sayt manzili:** https://sherozisrael.github.io/xisobchi/
 
----
+## Qanday ishlaydi
 
-## 1. Saytni Netlify'ga joylash (≈5 daqiqa)
+- Sayt GitHub Pages'da turadi (`sherozisrael/xisobchi` repozitoriysi).
+  `sayt/` papkasidagi o'zgarish GitHub'ga yuborilsa, sayt 1–2 daqiqada o'zi yangilanadi.
+- Ma'lumotlar har bir foydalanuvchining o'z Google Drive'idagi **Xisobchi** papkasida saqlanadi:
+  `xisobchi.json` — asosiy fayl, `zaxira/` — har kunlik nusxalar.
+- Google kirish sozlamalari: Google Cloud loyihasi `xisobchi-514512`.
 
-1. https://app.netlify.com ga kiring → **Sign up** → **Continue with Google**.
-2. **Add new project** (yoki *Add new site*) → **Deploy manually**.
-3. Kompyuterdagi `D:\Loyihalar\Xisobchi\sayt` papkasini **butunligicha** sahifadagi maydonga sudrab tashlang.
-4. Joylangach: **Project configuration → Change project name** → masalan `xisobchi-ishxona`.
-   Sayt manzili shunday bo'ladi: **https://xisobchi-ishxona.netlify.app**
-   Bu manzilni yozib qo'ying, keyingi qadamda kerak bo'ladi.
+## Yangi odamga ruxsat berish
 
-## 2. Google Cloud'da kalit (Client ID) olish (≈10 daqiqa)
+Ilova "Testing" rejimida — faqat ro'yxatdagi Gmail'lar kira oladi.
 
-1. https://console.cloud.google.com ga Gmail'ingiz bilan kiring.
-2. Tepadagi loyiha tanlagich → **New project** → nomi: `Xisobchi` → **Create**. Keyin shu loyihani tanlang.
-3. **Google Drive API'ni yoqing:** qidiruvga `Google Drive API` deb yozing → **Enable**.
-4. **Kirish oynasini sozlang:** qidiruvga `Google Auth Platform` deb yozing → **Get started**:
-   - App name: `Xisobchi`
-   - User support email: Gmail'ingiz
-   - Audience: **External**
-   - Contact email: Gmail'ingiz → **Create**
-5. **Kim kira olishini belgilang:** chap menyuda **Audience** → **Test users** → **Add users** →
-   ukangizning Gmail'ini (va o'zingiznikini) qo'shing → **Save**.
-   (Faqat shu ro'yxatdagi odamlar kira oladi — bu xavfsizroq.)
-6. **Kalit yarating:** chap menyuda **Clients** → **Create client**:
-   - Application type: **Web application**
-   - Name: `Xisobchi sayt`
-   - **Authorized JavaScript origins** → **Add URI** → `https://xisobchi-ishxona.netlify.app`
-     (1-qadamdagi manzilingiz; oxirida `/` belgisi bo'lmasin)
-   - **Create**
-7. Chiqqan **Client ID**'ni nusxalang. U shunga o'xshaydi:
-   `123456789012-abc123def456.apps.googleusercontent.com`
+1. https://console.cloud.google.com/auth/audience?project=xisobchi-514512
+2. **Test users** → **+ Add users** → Gmail'ni yozing → **Save**.
 
-## 3. Kalitni saytga qo'yish (≈2 daqiqa)
+## Yangi manzildan ochish kerak bo'lsa
 
-1. `D:\Loyihalar\Xisobchi\sayt\config.js` faylini Notepad bilan oching.
-2. `GOOGLE_CLIENT_ID: ''` qatoridagi qo'shtirnoqlar orasiga Client ID'ni qo'ying:
-   ```js
-   GOOGLE_CLIENT_ID: '123456789012-abc123def456.apps.googleusercontent.com',
-   ```
-3. Saqlang.
-4. Netlify'da loyihangiz → **Deploys** → `sayt` papkasini yana sudrab tashlang (yangilanadi).
+https://console.cloud.google.com/auth/clients?project=xisobchi-514512 → kalitni oching →
+**Authorized JavaScript origins** → **+ Add URI** → manzil (masalan `https://example.com`, oxirida `/` siz) → **Save**.
 
-## 4. Tekshirish
+Hozir ro'yxatda: `http://localhost:8080`, `https://sherozisrael.github.io`
 
-1. https://xisobchi-ishxona.netlify.app ni oching.
-2. Summani kiriting → **Boshlash** → sariq oynadagi **Google bilan ulash** tugmasini bosing.
-3. Google akkauntni tanlang. **«Google hasn't verified this app»** chiqsa → **Continue** (Davom etish).
-   Bu normal holat: ilova sizniki, uni Google rasman tekshirmagan.
-4. Ruxsatlar oynasida Drive katagi belgilangan bo'lsin → **Continue**.
-5. Tepada yashil **«Drive'ga saqlandi»** chiqsa — tayyor.
-   Google Drive'da **Xisobchi** papkasi, ichida `xisobchi.json` va `zaxira` paydo bo'ladi.
+## Kompyuterda sinash
 
----
-
-## Ukangizga yuboriladigan xabar
-
-> Havola: https://xisobchi-ishxona.netlify.app
->
-> 1. Chrome'da oching (telefonda ham ishlaydi).
-> 2. Kassadagi summani kiriting → «Boshlash».
-> 3. «Google bilan ulash» → Gmail'ingizni tanlang → «Continue» → ruxsat bering.
-> 4. Tepada yashil «Drive'ga saqlandi» chiqsa — hammasi joyida.
->
-> Har safar ochganda tepada sariq «Ulanish uchun bosing» chiqsa — bir marta bosing.
-> Boshqa kompyuter yoki telefondan: havolani ochib, «Google Drive'dagi ma'lumotni ochish»ni bosing.
-
----
-
-## Keyinchalik o'zgartirish kiritilsa
-
-`sayt` papkasidagi fayllar yangilangach, Netlify → **Deploys** → papkani yana sudrab tashlang.
-Ma'lumotlarga hech narsa qilmaydi — ular Google Drive'da turadi.
+`ishga-tushirish.bat` ni ikki marta bosing → http://localhost:8080 ochiladi.
+(Node.js kerak. Qora oynani yopsangiz, server to'xtaydi.)
 
 ## Muammo bo'lsa
 
 | Belgi | Sabab | Yechim |
 |---|---|---|
-| «Google sozlanmagan» | `config.js` da Client ID yo'q | 3-qadam |
-| Kirishda `redirect_uri_mismatch` / `origin_mismatch` | Google'dagi manzil sayt manzili bilan bir xil emas | 2.6-qadamni tekshiring (`https://`, oxirida `/` yo'q) |
-| `access_denied` | Gmail test users ro'yxatida yo'q | 2.5-qadam |
+| `access_denied` | Gmail test users ro'yxatida yo'q | Yuqoridagi "Yangi odamga ruxsat berish" |
+| `origin_mismatch` | Sayt manzili Google ro'yxatida yo'q | "Yangi manzildan ochish" bo'limi; o'zgarish kuchga kirishi bir necha daqiqa olishi mumkin |
 | Google oynasi ochilmaydi | Brauzer popup'ni to'sgan | Manzil satridagi belgidan popup'ga ruxsat bering |
+| Tepada sariq "Ulanish uchun bosing" | Brauzer qayta ochilgan | Bir marta bosing — normal holat |
