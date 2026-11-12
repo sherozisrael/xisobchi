@@ -37,7 +37,12 @@
     <div class="wrap">
       <div class="topbar">
         <div class="brand">Xisobchi</div>
-        <button id="syncPill" class="sync warn" type="button">Faylga saqlanmayapti</button>
+        <div class="top-actions">
+          <button id="syncPill" class="sync warn" type="button">Drive'ga ulanmagan</button>
+          <button id="settingsBtn" class="icon-top" type="button" title="Sozlamalar" aria-label="Sozlamalar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
       </div>
       <div class="kassas" id="kassaBar"></div>
       <div class="stats">
@@ -50,7 +55,6 @@
         <button data-tab="add" class="active">Yangi yozuv</button>
         <button data-tab="history">Tarix</button>
         <button data-tab="debts">Qarzlar</button>
-        <button data-tab="settings">Sozlamalar</button>
       </nav>
     </div>
   </header>
@@ -132,6 +136,10 @@
 
     <!-- SOZLAMALAR -->
     <section id="tab-settings" class="tab">
+      <div class="page-head">
+        <button class="btn small ghost" id="settingsBack" type="button">← Orqaga</button>
+        <h1>Sozlamalar</h1>
+      </div>
       <div class="card">
         <div class="card-head">
           <h2>Kassalar</h2>

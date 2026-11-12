@@ -28,6 +28,7 @@
   --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 1px 3px rgba(16, 24, 40, .06);
   --shadow-lg: 0 20px 50px -12px rgba(16, 24, 40, .25);
   --ring: 0 0 0 4px rgba(79, 70, 229, .15);
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -53,6 +54,7 @@
     --hero-2: #231d55;
     --shadow: 0 1px 2px rgba(0,0,0,.3);
     --ring: 0 0 0 4px rgba(129, 140, 248, .2);
+    color-scheme: dark;
   }
 }
 
@@ -159,12 +161,32 @@ header {
 .tabs button.active { color: #fff; border-bottom-color: #a5b4fc; }
 
 .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.top-actions { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.icon-top {
+  flex: none; width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+  display: grid; place-items: center;
+  background: rgba(255,255,255,.08); color: rgba(255,255,255,.85);
+  border: 1px solid rgba(255,255,255,.18);
+  transition: background .15s, color .15s, transform .3s;
+}
+.icon-top svg { width: 19px; height: 19px; }
+.icon-top:hover { background: rgba(255,255,255,.16); color: #fff; }
+.icon-top:hover svg { transform: rotate(45deg); transition: transform .3s; }
+.icon-top.active { background: #fff; color: #111827; border-color: #fff; }
+
+.page-head { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+.page-head h1 { font-size: 22px; }
+
+/* Sana maydonlari: kalendar belgisi ikkala rejimda ham ko'rinsin */
+input[type="date"], input[type="datetime-local"] { cursor: pointer; }
+input::-webkit-calendar-picker-indicator { cursor: pointer; opacity: .75; }
+input::-webkit-calendar-picker-indicator:hover { opacity: 1; }
 .sync {
   font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
   display: inline-flex; align-items: center; gap: 7px;
   padding: 7px 12px; border-radius: 999px; white-space: nowrap;
   border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.08); color: #fff;
-  max-width: 60vw; overflow: hidden; text-overflow: ellipsis;
+  max-width: 52vw; overflow: hidden; text-overflow: ellipsis;
 }
 .sync::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none; }
 .sync.ok { color: #6ee7b7; }
@@ -244,6 +266,7 @@ input.big { font-size: 26px; font-weight: 700; letter-spacing: -.02em; padding: 
 .money-wrap input { padding-right: 56px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .row2 > label:only-child { grid-column: 1 / -1; }
+.row2 > label, .row2 input { min-width: 0; }
 .hint { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: -8px; margin-bottom: 14px; }
 
 /* Turi tanlash (segment) */

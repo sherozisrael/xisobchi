@@ -629,10 +629,28 @@ $('#entryForm').addEventListener('submit', e => {
   $('#entryForm [name=amount]').focus();
 });
 
-/* Tablar */
-$$('.tabs button').forEach(b => b.onclick = () => {
-  $$('.tabs button').forEach(x => x.classList.toggle('active', x === b));
-  $$('.tab').forEach(t => t.classList.toggle('active', t.id === 'tab-' + b.dataset.tab));
+/* Tablar va sozlamalar */
+let lastTab = 'add';
+function showTab(name) {
+  $$('.tabs button').forEach(x => x.classList.toggle('active', x.dataset.tab === name));
+  $$('.tab').forEach(t => t.classList.toggle('active', t.id === 'tab-' + name));
+  $('#settingsBtn').classList.toggle('active', name === 'settings');
+  if (name !== 'settings') lastTab = name;
+}
+$$('.tabs button').forEach(b => b.onclick = () => showTab(b.dataset.tab));
+$('#settingsBtn').onclick = () => {
+  const open = $('#tab-settings').classList.contains('active');
+  showTab(open ? lastTab : 'settings');
+  if (!open) window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+$('#settingsBack').onclick = () => showTab(lastTab);
+
+// Sana maydonining istalgan joyini bosganda kalendar ochilsin
+document.addEventListener('click', e => {
+  const el = e.target;
+  if (el.tagName === 'INPUT' && (el.type === 'date' || el.type === 'datetime-local') && el.showPicker) {
+    try { el.showPicker(); } catch (err) { /* ba'zi brauzerlarda ruxsat yo'q */ }
+  }
 });
 
 /* Tarix filtrlari */
@@ -970,7 +988,7 @@ $('#gDisconnect').onclick = () => {
 };
 $('#syncPill').onclick = () => {
   if (CLIENT_ID && ['none', 'need', 'err', 'offline'].includes(cloudState)) return signIn(!cloud.connected);
-  $$('.tabs button').find(b => b.dataset.tab === 'settings').click();
+  showTab('settings');
   $('#cloudCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
 };
 
